@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ReadHub - El sitio donde todo IBMemer puede encontrar un libro</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+  <style>
+    /* Limitar el ancho máximo del contenido a 1920px y centrarlo */
+    .container-custom {
+      max-width: 1920px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* Flexbox para asegurar la distribución correcta de los elementos */
+    .navbar {
+      justify-content: space-between;
+    }
+
+    /* Ajustes de margin para los items */
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-item {
+      padding: 0.5rem 1rem; /* Espaciado interno ajustado */
+    }
+
+    .navbar-end {
+      display: flex;
+      align-items: center;
+    }
+
+    /* Mantener elementos dentro de los límites */
+    .navbar-item .icon,
+    .navbar-item .is-size-4 {
+      white-space: nowrap; /* Evita que los elementos se vayan a la siguiente línea */
+    }
+
+    /* Estilo para la imagen de logo */
+    .hero-logo {
+      width: 100%;
+      height: auto;
+      max-width: 1920px;
+      margin: 0 auto;
+    }
+
+    /* Ajustar el contenedor del formulario y mensajes */
+    .section {
+      padding: 2rem 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Barra de navegación superior -->
+  <nav class="navbar has-shadow">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="#">
+        <!-- Icono de la aplicación -->
+        <span class="icon">
+          <i class="fa fa-book"></i>
+        </span>
+        <!-- Nombre de la aplicación y frase -->
+        <div style="margin-left: 10px;">
+          <span class="is-size-4 has-text-weight-bold">ReadHub</span>
+          <br>
+          <span class="is-size-7">El sitio donde todo IBMemer puede encontrar un libro</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Menú de usuario a la derecha -->
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <!-- Icono de usuario -->
+          <a class="button is-light">
+            <span class="icon">
+              <i class="fa fa-user"></i>
+            </span>
+            <span>Usuario</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Imagen de logo que abarca todo el ancho pero está limitada a 1920px -->
+  <div class="container-custom">
+    <img src="ruta/de/tu/logo.jpg" alt="Logo de ReadHub" class="hero-logo">
+  </div>
+
+  <section class="section">
+    <div class="container container-custom">
+      <div class="container">
+        <div class="columns is-variable is-8">
+          <div class="column is-half">
+            <h3 class="title is-3">
+              Messages from past visitors
+            </h3>
+            <div id="entries"></div>
+          </div>
+          <div class="column is-half">
+            <h3 class="title is-3">
+              Add your message
+            </h3>
+            <form id="addEntry">
+              <div class="field">
+                <label class="label">Name</label>
+                <div class="control">
+                  <input class="input" type="text" placeholder="your name" id="name" required>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                  <input class="input" type="email" placeholder="your email" id="email" required>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Comment</label>
+                <div class="control">
+                  <textarea class="textarea" placeholder="your comment" id="comment" required></textarea>
+                </div>
+              </div>
+              <div class="control">
+                <button class="button is-primary is-fullwidth">Send your message</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script id="entries-template" type="text/x-handlebars-template">
+    {{#each entries}}
+    <div class="box">
+      <article class="media">
+        <div class="media-left">
+          <figure class="image is-64x64">
+            <img src="{{icon}}" alt="No Image">
+          </figure>
+        </div>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong>{{name}}</strong> <small>{{email}}</small> <strong>Date:</strong> <small>{{createdAt}}</small>
+              <br> {{comment}}
+            </p>
+          </div>
+        </div>
+      </article>
+    </div>
+    {{/each}}
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="guestbook.js"></script>
+</body>
+
+</html>
