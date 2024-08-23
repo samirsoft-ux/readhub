@@ -1,168 +1,72 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ReadHub - El sitio donde todo IBMemer puede encontrar un libro</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-  <style>
-    /* Limitar el ancho máximo del contenido a 1920px y centrarlo */
-    .container-custom {
-      max-width: 1920px;
-      margin: 0 auto;
-      padding: 0 15px;
-    }
-
-    /* Flexbox para asegurar la distribución correcta de los elementos */
-    .navbar {
-      justify-content: space-between;
-    }
-
-    /* Ajustes de margin para los items */
-    .navbar-brand {
-      display: flex;
-      align-items: center;
-    }
-
-    .navbar-item {
-      padding: 0.5rem 1rem; /* Espaciado interno ajustado */
-    }
-
-    .navbar-end {
-      display: flex;
-      align-items: center;
-    }
-
-    /* Mantener elementos dentro de los límites */
-    .navbar-item .icon,
-    .navbar-item .is-size-4 {
-      white-space: nowrap; /* Evita que los elementos se vayan a la siguiente línea */
-    }
-
-    /* Estilo para la imagen de logo */
-    .hero-logo {
-      width: 100%;
-      height: auto;
-      max-width: 1920px;
-      margin: 0 auto;
-    }
-
-    /* Ajustar el contenedor del formulario y mensajes */
-    .section {
-      padding: 2rem 0;
-    }
-  </style>
-</head>
-
-<body>
-  <!-- Barra de navegación superior -->
-  <nav class="navbar has-shadow">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="#">
-        <!-- Icono de la aplicación -->
-        <span class="icon">
-          <i class="fa fa-book"></i>
-        </span>
-        <!-- Nombre de la aplicación y frase -->
-        <div style="margin-left: 10px;">
-          <span class="is-size-4 has-text-weight-bold">ReadHub</span>
-          <br>
-          <span class="is-size-7">El sitio donde todo IBMemer puede encontrar un libro</span>
-        </div>
-      </a>
-    </div>
-
-    <!-- Menú de usuario a la derecha -->
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <!-- Icono de usuario -->
-          <a class="button is-light">
-            <span class="icon">
-              <i class="fa fa-user"></i>
-            </span>
-            <span>Usuario</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Imagen de logo que abarca todo el ancho pero está limitada a 1920px -->
-  <div class="container-custom">
-    <img src="ruta/de/tu/logo.jpg" alt="Logo de ReadHub" class="hero-logo">
+<div class="button-list">
+  <!-- Botón Préstamo de libro -->
+  <div class="control" id="button_reserva">
+    <button class="button is-primary is-fullwidth" onclick="toggleForm('addEntry_reserva', 'button_reserva')">Préstamo de libro</button>
   </div>
 
-  <section class="section">
-    <div class="container container-custom">
-      <div class="container">
-        <div class="columns is-variable is-8">
-          <div class="column is-half">
-            <h3 class="title is-3">
-              Messages from past visitors
-            </h3>
-            <div id="entries"></div>
-          </div>
-          <div class="column is-half">
-            <h3 class="title is-3">
-              Add your message
-            </h3>
-            <form id="addEntry">
-              <div class="field">
-                <label class="label">Name</label>
-                <div class="control">
-                  <input class="input" type="text" placeholder="your name" id="name" required>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label">Email</label>
-                <div class="control">
-                  <input class="input" type="email" placeholder="your email" id="email" required>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label">Comment</label>
-                <div class="control">
-                  <textarea class="textarea" placeholder="your comment" id="comment" required></textarea>
-                </div>
-              </div>
-              <div class="control">
-                <button class="button is-primary is-fullwidth">Send your message</button>
-              </div>
-            </form>
-          </div>
-        </div>
+  <form id="addEntry_reserva" class="hidden-form">
+    <div class="field">
+      <label class="label">Name</label>
+      <div class="control">
+        <input class="input" type="text" placeholder="your name" id="name_reserva" required>
       </div>
     </div>
-  </section>
-
-  <script id="entries-template" type="text/x-handlebars-template">
-    {{#each entries}}
-    <div class="box">
-      <article class="media">
-        <div class="media-left">
-          <figure class="image is-64x64">
-            <img src="{{icon}}" alt="No Image">
-          </figure>
-        </div>
-        <div class="media-content">
-          <div class="content">
-            <p>
-              <strong>{{name}}</strong> <small>{{email}}</small> <strong>Date:</strong> <small>{{createdAt}}</small>
-              <br> {{comment}}
-            </p>
-          </div>
-        </div>
-      </article>
+    <div class="field">
+      <label class="label">Email</label>
+      <div class="control">
+        <input class="input" type="email" placeholder="your email" id="email_reserva" required>
+      </div>
     </div>
-    {{/each}}
+    <div class="field">
+      <label class="label">Comment</label>
+      <div class="control">
+        <textarea class="textarea" placeholder="your comment" id="comment_reserva" required></textarea>
+      </div>
+    </div>
+    <div class="control">
+      <button class="button is-primary is-fullwidth">Pedir prestado</button>
+    </div>
+    <div class="control">
+      <button class="button is-danger is-fullwidth" onclick="cancelForm('addEntry_reserva', 'button_reserva')">Cancelar la solicitud</button>
+    </div>
+  </form>
+
+  <script>
+    function toggleForm(formId, buttonId) {
+      const form = document.getElementById(formId);
+      const button = document.getElementById(buttonId);
+      if (form.style.display === 'none' || form.style.display === '') {
+        form.style.display = 'block';
+        button.style.display = 'none';
+        restoreRequiredAttributes(form);
+      } else {
+        form.style.display = 'none';
+        button.style.display = 'block';
+      }
+    }
+
+    function cancelForm(formId, buttonId) {
+      const form = document.getElementById(formId);
+      const button = document.getElementById(buttonId);
+      removeRequiredAttributes(form);
+      form.style.display = 'none';
+      button.style.display = 'block';
+    }
+
+    function removeRequiredAttributes(form) {
+      const elements = form.querySelectorAll('[required]');
+      elements.forEach(el => {
+        el.dataset.required = 'true';
+        el.removeAttribute('required');
+      });
+    }
+
+    function restoreRequiredAttributes(form) {
+      const elements = form.querySelectorAll('[data-required="true"]');
+      elements.forEach(el => {
+        el.setAttribute('required', '');
+        el.removeAttribute('data-required');
+      });
+    }
   </script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="guestbook.js"></script>
-</body>
-
-</html>
+</div>

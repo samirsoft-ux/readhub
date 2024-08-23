@@ -15,6 +15,29 @@
       padding: 0 15px;
     }
 
+    /* Espaciado entre los botones */
+    .button-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px; /* Espacio entre los botones */
+    }
+
+    .button-list .button {
+      padding: 1rem; /* Ajustar el tamaño del botón */
+      font-size: 1.25rem; /* Aumentar el tamaño del texto */
+      border-radius: 8px; /* Bordes redondeados */
+    }
+
+    .button-list .button:hover {
+      background-color: #3273dc; /* Color de fondo al pasar el mouse */
+      color: #fff; /* Color de texto al pasar el mouse */
+    }
+
+    .hidden-form {
+      display: none;
+      margin-top: 15px; /* Espacio entre el formulario y el botón */
+    }
+
     /* Flexbox para asegurar la distribución correcta de los elementos */
     .navbar {
       justify-content: space-between;
@@ -106,42 +129,151 @@
         <div class="columns is-variable is-8">
           <div class="column is-half">
             <h3 class="title is-3">
-              Messages from past visitors
+              Solicitudes:
             </h3>
-            <div id="entries"></div>
+
+            <div class="button-list">
+              <!-- Botón Préstamo de libro -->
+              <div class="control" id="button_reserva">
+                <button class="button is-primary is-fullwidth" onclick="toggleForm('addEntry_reserva', 'button_reserva')">Préstamo de libro</button>
+              </div>
+            
+              <form id="addEntry_reserva" class="hidden-form">
+                <div class="field">
+                  <label class="label">Name</label>
+                  <div class="control">
+                    <input class="input" type="text" placeholder="your name" id="name_reserva" required>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Email</label>
+                  <div class="control">
+                    <input class="input" type="email" placeholder="your email" id="email_reserva" required>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Comment</label>
+                  <div class="control">
+                    <textarea class="textarea" placeholder="your comment" id="comment_reserva" required></textarea>
+                  </div>
+                </div>
+                <div class="control">
+                  <button class="button is-primary is-fullwidth">Pedir prestado</button>
+                </div>
+                <div class="control">
+                  <button class="button is-danger is-fullwidth" onclick="cancelForm('addEntry_reserva', 'button_reserva')">Cancelar la solicitud</button>
+                </div>
+              </form>
+
+              <!-- Botón Devolución de libro -->
+              <div class="control">
+                <button class="button is-primary is-fullwidth" onclick="toggleForm('addEntry_devolucion')">Devolución de libro</button>
+              </div>
+              <form id="addEntry_devolucion" class="hidden-form">
+                <div class="field">
+                  <label class="label">Name</label>
+                  <div class="control">
+                    <input class="input" type="text" placeholder="your name" id="name_devolucion" required>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Email</label>
+                  <div class="control">
+                    <input class="input" type="email" placeholder="your email" id="email_devolucion" required>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Comment</label>
+                  <div class="control">
+                    <textarea class="textarea" placeholder="your comment" id="comment_devolucion" required></textarea>
+                  </div>
+                </div>
+                <div class="control">
+                  <button class="button is-primary is-fullwidth">Send your message</button>
+                </div>
+              </form>
+
+              <!-- Botón Donación de libro -->
+              <div class="control">
+                <button class="button is-primary is-fullwidth" onclick="toggleForm('addEntry_donacion')">Donación de libro</button>
+              </div>
+              <form id="addEntry_donacion" class="hidden-form">
+                <div class="field">
+                  <label class="label">Name</label>
+                  <div class="control">
+                    <input class="input" type="text" placeholder="your name" id="name_donacion" required>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Email</label>
+                  <div class="control">
+                    <input class="input" type="email" placeholder="your email" id="email_donacion" required>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Comment</label>
+                  <div class="control">
+                    <textarea class="textarea" placeholder="your comment" id="comment_donacion" required></textarea>
+                  </div>
+                </div>
+                <div class="control">
+                  <button class="button is-primary is-fullwidth">Send your message</button>
+                </div>
+              </form>
+            </div>
+            
+
+
           </div>
           <div class="column is-half">
             <h3 class="title is-3">
-              Add your message
+              Messages from past visitors
             </h3>
-            <form id="addEntry">
-              <div class="field">
-                <label class="label">Name</label>
-                <div class="control">
-                  <input class="input" type="text" placeholder="your name" id="name" required>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label">Email</label>
-                <div class="control">
-                  <input class="input" type="email" placeholder="your email" id="email" required>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label">Comment</label>
-                <div class="control">
-                  <textarea class="textarea" placeholder="your comment" id="comment" required></textarea>
-                </div>
-              </div>
-              <div class="control">
-                <button class="button is-primary is-fullwidth">Send your message</button>
-              </div>
-            </form>
+            <div id="entries"></div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <script>
+    function toggleForm(formId, buttonId) {
+      const form = document.getElementById(formId);
+      const button = document.getElementById(buttonId);
+      if (form.style.display === 'none' || form.style.display === '') {
+        form.style.display = 'block';
+        button.style.display = 'none';
+        restoreRequiredAttributes(form);
+      } else {
+        form.style.display = 'none';
+        button.style.display = 'block';
+      }
+    }
+
+    function cancelForm(formId, buttonId) {
+      const form = document.getElementById(formId);
+      const button = document.getElementById(buttonId);
+      removeRequiredAttributes(form);
+      form.style.display = 'none';
+      button.style.display = 'block';
+    }
+
+    function removeRequiredAttributes(form) {
+      const elements = form.querySelectorAll('[required]');
+      elements.forEach(el => {
+        el.dataset.required = 'true';
+        el.removeAttribute('required');
+      });
+    }
+
+    function restoreRequiredAttributes(form) {
+      const elements = form.querySelectorAll('[data-required="true"]');
+      elements.forEach(el => {
+        el.setAttribute('required', '');
+        el.removeAttribute('data-required');
+      });
+    }
+  </script>
 
   <script id="entries-template" type="text/x-handlebars-template">
     {{#each entries}}
