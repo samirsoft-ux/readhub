@@ -134,34 +134,27 @@
 
             <div class="button-list">
               <!-- Botón Préstamo de libro -->
-              <div class="control" id="button_reserva">
-                <button class="button is-primary is-fullwidth" onclick="toggleForm('addEntry_reserva', 'button_reserva')">Préstamo de libro</button>
+              <div class="control" id="button_donar">
+                <button class="button is-primary is-fullwidth" onclick="toggleForm('addEntry_donar', 'button_donar')">Donar un libro</button>
               </div>
-            
-              <form id="addEntry_reserva" class="hidden-form">
+              <form id="addEntry_donar" class="hidden-form">
                 <div class="field">
-                  <label class="label">Name</label>
+                  <label class="label">Nombre</label>
                   <div class="control">
-                    <input class="input" type="text" placeholder="your name" id="name_reserva" required>
+                    <input class="input" type="text" placeholder="Ingresa el nombre del libro" id="name_donar" required>
                   </div>
                 </div>
                 <div class="field">
-                  <label class="label">Email</label>
+                  <label class="label">Descripción</label>
                   <div class="control">
-                    <input class="input" type="email" placeholder="your email" id="email_reserva" required>
+                    <textarea class="textarea" placeholder="Puedes ingresar el contenido de la contraportada." id="description_donar" required></textarea>
                   </div>
                 </div>
-                <div class="field">
-                  <label class="label">Comment</label>
-                  <div class="control">
-                    <textarea class="textarea" placeholder="your comment" id="comment_reserva" required></textarea>
-                  </div>
+                <div class="control" style="margin-bottom: 10px;">
+                  <button class="button is-primary is-fullwidth">Enviar solicitud</button>
                 </div>
                 <div class="control">
-                  <button class="button is-primary is-fullwidth">Pedir prestado</button>
-                </div>
-                <div class="control">
-                  <button class="button is-danger is-fullwidth" onclick="cancelForm('addEntry_reserva', 'button_reserva')">Cancelar la solicitud</button>
+                  <button class="button is-danger is-fullwidth" onclick="cancelForm(event, 'addEntry_donar', 'button_donar')">Cancelar solicitud</button>
                 </div>
               </form>
 
@@ -182,6 +175,18 @@
                     <input class="input" type="email" placeholder="your email" id="email_devolucion" required>
                   </div>
                 </div>
+
+                <div class="field">
+                  <label class="label">Selecciona un nombre</label>
+                  <div class="control">
+                    <div class="select is-fullwidth">
+                      <select id="lista_libro" required>
+                        <option value="">Selecciona un nombre</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="field">
                   <label class="label">Comment</label>
                   <div class="control">
@@ -250,7 +255,8 @@
       }
     }
 
-    function cancelForm(formId, buttonId) {
+    function cancelForm(event, formId, buttonId) {
+      event.preventDefault(); // Evita el comportamiento predeterminado del botón
       const form = document.getElementById(formId);
       const button = document.getElementById(buttonId);
       removeRequiredAttributes(form);

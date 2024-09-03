@@ -82,23 +82,18 @@ app.post("/guestbook/entries", cors(cors_config), function (req, res, next) {
   let entry = {
     createdAt: new Date().toISOString(),
     name: req.body.name,
-    email: req.body.email,
-    comment: req.body.comment
+    description: req.body.description || 'No description provided', // Valor por defecto para la descripción
+    status: req.body.status || 'free', // Valor por defecto para el status
+    image: req.body.image || 'https://www.shutterstock.com/image-vector/no-image-available-vector-hand-260nw-745639717.jpg' // URL por defecto para la imagen
   };
-
+  
   return cloudantClient.postDocument({
     db: dbName,
     document: entry,
   })
     .then(addedEntry => {
       console.log('Add entry successful');
-      return res.status(201).json({
-        _id: addedEntry.id,
-        name: addedEntry.name,
-        email: addedEntry.email,
-        comment: addedEntry.comment,
-        createdAt: addedEntry.createdAt
-      });
+      return res.status(201).json(entry); // Cambiado para devolver el objeto entry con valores reales guardados
     })
     .catch(error => {
       console.log('Add entry failed');
@@ -120,20 +115,22 @@ app.get("/guestbook/entries", cors(cors_config), function (req, res, next) {
   })
     .then(allDocuments => {
       let fetchedEntries = allDocuments.result;
-      let entries= {entries: fetchedEntries.rows.map((row) => { return {
+      let entries= {entries: fetchedEntries.rows.map((row) => { 
+        return {
           name: row.doc.name,
-          email: row.doc.email,
-          comment: row.doc.comment,
-          createdAt: row.doc.createdAt,
-          icon: (row.doc.email ? `https://secure.gravatar.com/avatar/${md5.hash(row.doc.email.trim().toLowerCase())}?s=64` : null)
-        }})}
-      console.log('Get names successful');
+          image: row.doc.image,
+          status: row.doc.status,
+          description: row.doc.description,
+          createdAt: row.doc.createdAt
+        };
+      })};
+      console.log('Get entries successful');
       return res.json(entries);
     })
     .catch(error => {
-      console.log('Get names failed');
+      console.log('Get entries failed');
       return res.status(500).json({
-        message: 'Get names failed.',
+        message: 'Get entries failed.',
         error: error,
       });
     });
