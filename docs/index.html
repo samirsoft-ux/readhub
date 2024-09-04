@@ -7,7 +7,31 @@
   <title>ReadHub</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
   <style>
+    body {
+      font-family: 'Courier New', monospace;
+    }
+    /* Específicamente para los botones, en caso de que quieras asegurarte */
+    button {
+      font-family: 'Courier New', monospace !important;
+    }
+    textarea {
+      font-family: 'Courier New', monospace !important;
+    }
+    .typing-cursor::after {
+      content: '|';
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% {
+        color: transparent;
+      }
+      50% {
+        color: black; /* Cambia esto por el color que prefieras */
+      }
+    }
     /* Limitar el ancho máximo del contenido a 1920px y centrarlo */
     .container-custom {
       max-width: 1920px;
@@ -76,26 +100,67 @@
     .section {
       padding: 2rem 0;
     }
+
+    .confirm-message {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: rgba(0, 128, 0, 0.9);
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      display: none; /* Inicialmente oculto*/
+    }
+    #category_donar {
+      width: 235%; /* Ajusta esto según tus necesidades */
+      max-width: 600px; /* Establece un máximo que se adapte al diseño de tu página */
+    }
+
+    #category_donar option {
+      white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+      overflow: hidden; /* Oculta cualquier texto que exceda el ancho del select */
+      text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
+    }
+    .help.is-danger {
+      color: red;
+      font-size: 0.75rem; /* Ajusta el tamaño de la fuente según prefieras */
+    }
+    #category-help {
+      display: block; /* Hace que el span ocupe su propia línea */
+      max-width: 230px; /* Ajusta esto según el ancho deseado */
+      text-align: left; /* Asegura que el texto esté alineado a la izquierda */
+      font-weight: bold; /* Aplica negrita al texto */
+    }
+    #logo {
+      height: 100px; /* Ajusta la altura para que se adapte a tu diseño */
+      width: auto; /* Mantiene la proporción de la imagen */
+      vertical-align: middle; /* Alineación vertical con el texto si es necesario */
+    }
   </style>
 </head>
 
 <body>
+  <div id="confirmMessage" class="confirm-message">
+    La solicitud se ha enviado correctamente
+  </div>
+  
   <!-- Barra de navegación superior -->
   <nav class="navbar has-shadow">
     <div class="container container-custom">
   <div class="navbar" style="display: flex; justify-content: space-between; align-items: center;">
     <!-- Elementos a la izquierda -->
     <div class="navbar-brand">
+      <img id="logo" src="img/icon.jpg" alt="ReadHub Logo">
       <a class="navbar-item" href="#">
-        <!-- Icono de la aplicación -->
-        <span class="icon">
-          <i class="fa fa-book"></i>
-        </span>
+        <!-- Imagen de la aplicación en lugar de ícono -->
+        
         <!-- Nombre de la aplicación y frase -->
         <div style="margin-left: 10px;">
           <span class="is-size-4 has-text-weight-bold">ReadHub</span>
           <br>
-          <span class="is-size-7">El sitio donde todo IBMemer puede encontrar un libro</span>
+          <span class="is-size-8 typing-cursor">El sitio donde todo IBM puede encontrar un libro</span>
         </div>
       </a>
     </div>
@@ -120,7 +185,7 @@
 
   <!-- Imagen de logo que abarca todo el ancho -->
   <div class="container-custom">
-    <img src="img/back.jpg" alt="Logo de ReadHub" class="hero-logo">
+    <img src="img/back.jpg" alt="Fondo de ReadHub" class="hero-logo">
   </div>
   
   <section class="section">
@@ -133,7 +198,7 @@
             </h3>
 
             <div class="button-list">
-              <!-- Botón Préstamo de libro -->
+              <!-- Botón Donar un libro -->
               <div class="control" id="button_donar">
                 <button class="button is-primary is-fullwidth" onclick="toggleForm('addEntry_donar', 'button_donar')">Donar un libro</button>
               </div>
@@ -144,17 +209,83 @@
                     <input class="input" type="text" placeholder="Ingresa el nombre del libro" id="name_donar" required>
                   </div>
                 </div>
+
+                <div class="field">
+                  <label class="label">Categoría</label>
+                  <div class="control">
+                    <select class="input" id="category_donar" required>
+                      <optgroup label="Ficción">
+                        <option value="novela">Novela</option>
+                        <option value="cuento_corto">Cuento corto</option>
+                        <option value="novela_grafica">Novela gráfica</option>
+                        <option value="ficcion_historica">Ficción histórica</option>
+                        <option value="ficcion_especulativa">Ficción especulativa</option>
+                        <option value="ciencia_ficcion">Ciencia ficción</option>
+                        <option value="fantasia">Fantasía</option>
+                        <option value="terror">Terror</option>
+                        <option value="ficcion_misterio">Ficción de misterio</option>
+                        <option value="romance">Romance</option>
+                        <option value="ficcion_aventura">Ficción de aventura</option>
+                        <option value="thriller_psicologico">Thriller psicológico</option>
+                      </optgroup>
+                      <optgroup label="No Ficción">
+                        <option value="biografia">Biografía</option>
+                        <option value="autobiografia">Autobiografía</option>
+                        <option value="memorias">Memorias</option>
+                        <option value="ensayo">Ensayo</option>
+                        <option value="historia">Historia</option>
+                        <option value="autoayuda">Autoayuda</option>
+                        <option value="educacion">Educación</option>
+                        <option value="ciencia">Ciencia</option>
+                        <option value="filosofia">Filosofía</option>
+                        <option value="arte_fotografia">Arte y Fotografía</option>
+                        <option value="guias_viaje">Guías de viaje</option>
+                        <option value="cocina_gastronomia">Cocina y Gastronomía</option>
+                      </optgroup>
+                      <optgroup label="Literatura Infantil y Juvenil">
+                        <option value="libros_ilustrados">Libros ilustrados</option>
+                        <option value="libros_actividades">Libros de actividades</option>
+                        <option value="ficcion_juvenil">Ficción juvenil</option>
+                        <option value="ficcion_ninos">Ficción para niños</option>
+                        <option value="cuentos_hadas_folclore">Cuentos de hadas y folclore</option>
+                        <option value="educacion_temprana">Educación temprana</option>
+                      </optgroup>
+                      <optgroup label="Poesía y Drama">
+                        <option value="poesia_lirica">Poesía lírica</option>
+                        <option value="poesia_epica">Poesía épica</option>
+                        <option value="poesia_contemporanea">Poesía contemporánea</option>
+                        <option value="teatro">Teatro</option>
+                        <option value="guiones">Guiones</option>
+                      </optgroup>
+                      <optgroup label="Educación y Referencia">
+                        <option value="diccionarios">Diccionarios</option>
+                        <option value="enciclopedias">Enciclopedias</option>
+                        <option value="manuales_educativos">Manuales educativos</option>
+                        <option value="libros_texto">Libros de texto</option>
+                      </optgroup>
+                      <optgroup label="Religión y Espiritualidad">
+                        <option value="libros_sagrados">Libros sagrados</option>
+                        <option value="espiritualidad">Espiritualidad</option>
+                        <option value="teologia">Teología</option>
+                        <option value="mitologia">Mitología</option>
+                      </optgroup>
+                    </select>
+                    <span id="category-help" class="help is-danger">Elige una categoría de la lista, incluso si no es una coincidencia perfecta con el libro que quieres donar.</span>
+                  </div>
+                </div>
+
                 <div class="field">
                   <label class="label">Descripción</label>
                   <div class="control">
                     <textarea class="textarea" placeholder="Puedes ingresar el contenido de la contraportada." id="description_donar" required></textarea>
                   </div>
                 </div>
+                
                 <div class="control" style="margin-bottom: 10px;">
-                  <button class="button is-primary is-fullwidth">Enviar solicitud</button>
+                  <button class="button is-primary is-fullwidth">Donar el libro</button>
                 </div>
                 <div class="control">
-                  <button class="button is-danger is-fullwidth" onclick="cancelForm(event, 'addEntry_donar', 'button_donar')">Cancelar solicitud</button>
+                  <button class="button is-danger is-fullwidth" onclick="cancelForm(event, 'addEntry_donar', 'button_donar')">Cancelar la solicitud</button>
                 </div>
               </form>
 
@@ -287,14 +418,16 @@
       <article class="media">
         <div class="media-left">
           <figure class="image is-64x64">
-            <img src="{{icon}}" alt="No Image">
+            <!-- Cambiar {{icon}} por {{image}} para usar la URL de la imagen guardada en la base de datos -->
+            <img src="{{image}}" alt="No Image" onerror="this.onerror=null;this.src='https://www.shutterstock.com/image-vector/no-image-available-vector-hand-260nw-745639717.jpg';">
           </figure>
         </div>
         <div class="media-content">
           <div class="content">
             <p>
-              <strong>{{name}}</strong> <small>{{email}}</small> <strong>Date:</strong> <small>{{createdAt}}</small>
-              <br> {{comment}}
+              <strong>{{name}}</strong> <br>
+              <strong>Date:</strong> <small>{{createdAt}}</small>
+              <br>{{description}}
             </p>
           </div>
         </div>
@@ -306,6 +439,50 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="guestbook.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+  <script>
+    function matchCustom(params, data) {
+      // Si no hay término de búsqueda, devuelve todos los datos
+      if ($.trim(params.term) === '') {
+          return data;
+      }
+
+      // No mostrar `<optgroup>` en los resultados
+      if (data.children && data.children.length > 0) {
+          // Recorrer y filtrar solo las opciones de los grupos
+          var filteredChildren = [];
+          $.each(data.children, function (idx, child) {
+              if (child.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
+                  filteredChildren.push(child);
+              }
+          });
+
+          // Si tenemos resultados coincidentes dentro del grupo, devolver esos
+          if (filteredChildren.length) {
+              var modifiedData = $.extend({}, data, true);
+              modifiedData.children = filteredChildren;
+              return modifiedData;
+          }
+          return null;
+      }
+
+      // Comprobar si la opción del texto coincide
+      if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) > -1) {
+          return data;
+      }
+
+      // No devolver nada si no hay coincidencias
+      return null;
+    }
+
+    $(document).ready(function() {
+        $('#category_donar').select2({
+            placeholder: "Selecciona una categoría",
+            allowClear: true,
+            matcher: matchCustom // Usar el matcher personalizado
+        });
+    });
+  </script>
 </body>
 
 </html>

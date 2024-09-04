@@ -15,8 +15,8 @@ const guestbook = {
     });
   },
   // add a single guestbook entry
-  add(name, description) {
-    console.log('Sending', name, description);
+  add(name, description, category, image, status) {
+    console.log('Sending', name, description, category, image, status);
     return $.ajax({
       type: 'POST',
       url: `${apiUrl}/guestbook/entries`,
@@ -24,6 +24,7 @@ const guestbook = {
       data: JSON.stringify({
         name,
         description,
+        category  // Incluir la categoría en la petición
       }),
       dataType: 'json',
     });
@@ -74,15 +75,18 @@ const guestbook = {
   }
 
   // intercept the click on the submit button, add the guestbook entry and
-  // reload entries on success
+  // intercept the click on the submit button, add the guestbook entry and reload entries on success
   $(document).on('submit', '#addEntry_donar', function(e) {
     e.preventDefault();
     guestbook.add(
       $('#name_donar').val().trim(),
-      $('#description_donar').val().trim()
+      $('#description_donar').val().trim(),
+      $('#category_donar').val().trim(),  // Asegúrate de tener un input para la categoría
     ).done(function(result) {
-      // reload entries
-      loadEntries();
+      // Establecer una bandera en el almacenamiento local
+      localStorage.setItem('showConfirmation', 'true');
+      // Recargar la página
+      window.location.reload();
     }).error(function(error) {
       console.log(error);
     });
@@ -91,5 +95,21 @@ const guestbook = {
   $(document).ready(function() {
     prepareTemplates();
     loadEntries();
+  
+    // Comprobar si se debe mostrar el mensaje de confirmación
+    if (localStorage.getItem('showConfirmation') === 'true') {
+      showConfirmation();
+      // Limpiar la variable para que el mensaje no se muestre de nuevo sin una nueva operación
+      localStorage.removeItem('showConfirmation');
+    }
   });
+  
+  // Función para mostrar el mensaje de confirmación
+  function showConfirmation() {
+    const message = document.getElementById('confirmMessage');
+    message.style.display = 'block'; // Muestra el mensaje
+    setTimeout(function() {
+      message.style.display = 'none'; // Oculta el mensaje después de 5 segundos
+    }, 5000);
+  }
 })();

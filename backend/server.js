@@ -82,9 +82,10 @@ app.post("/guestbook/entries", cors(cors_config), function (req, res, next) {
   let entry = {
     createdAt: new Date().toISOString(),
     name: req.body.name,
-    description: req.body.description || 'No description provided', // Valor por defecto para la descripción
-    status: req.body.status || 'free', // Valor por defecto para el status
-    image: req.body.image || 'https://www.shutterstock.com/image-vector/no-image-available-vector-hand-260nw-745639717.jpg' // URL por defecto para la imagen
+    description: req.body.description || 'No description provided',
+    status: req.body.status || 'free',
+    image: req.body.image || 'https://www.shutterstock.com/image-vector/no-image-available-vector-hand-260nw-745639717.jpg',
+    category: req.body.category || 'General' // Agregar un valor por defecto si no se proporciona
   };
   
   return cloudantClient.postDocument({
@@ -93,7 +94,7 @@ app.post("/guestbook/entries", cors(cors_config), function (req, res, next) {
   })
     .then(addedEntry => {
       console.log('Add entry successful');
-      return res.status(201).json(entry); // Cambiado para devolver el objeto entry con valores reales guardados
+      return res.status(201).json(entry); // Devuelve el objeto entry con valores reales guardados
     })
     .catch(error => {
       console.log('Add entry failed');
@@ -115,12 +116,13 @@ app.get("/guestbook/entries", cors(cors_config), function (req, res, next) {
   })
     .then(allDocuments => {
       let fetchedEntries = allDocuments.result;
-      let entries= {entries: fetchedEntries.rows.map((row) => { 
+      let entries = {entries: fetchedEntries.rows.map((row) => {
         return {
           name: row.doc.name,
           image: row.doc.image,
           status: row.doc.status,
           description: row.doc.description,
+          category: row.doc.category, // Asegúrate de incluir el nuevo campo
           createdAt: row.doc.createdAt
         };
       })};
